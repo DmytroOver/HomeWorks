@@ -2,7 +2,6 @@
 //
 
 #include "main.h"
-#include <memory>
 
 
 int main()
