@@ -1,18 +1,19 @@
 #include "SharedPtr.h"
+#include "WeakPtr.h"
 
-SharedPtr::SharedPtr(int* data): m_data(data), m_count(nullptr)
+SharedPtr::SharedPtr(int* data): m_ptr(data), m_control(nullptr)
 {
-	if (m_data)
+	if (m_ptr)
 	{
-		m_count = new size_t(1);
+		m_control = new ControlBlock();
 	}
 }
 
-SharedPtr::SharedPtr(const SharedPtr& other): m_data(other.m_data), m_count(other.m_count)
+SharedPtr::SharedPtr(const SharedPtr& other): m_ptr(other.m_ptr), m_control(other.m_control)
 {
-	if (m_count)
+	if (m_control)
 	{
-		++(*m_count);
+		m_control->m_refCount++;
 	}
 }
 
@@ -20,11 +21,11 @@ SharedPtr& SharedPtr::operator=(const SharedPtr& other)
 {
 	if (this == &other) return *this;
 	release();
-	m_data = other.m_data;
-	m_count = other.m_count;
-	if (m_count)
+	m_ptr = other.m_ptr;
+	m_control = other.m_control;
+	if (m_control)
 	{
-		++(*m_count);
+		m_control->m_refCount++;
 	}
 	return *this;
 }
@@ -36,18 +37,26 @@ SharedPtr::~SharedPtr()
 
 void SharedPtr::release()
 {
-	if (m_count && --(*m_count) == 0)
+	if (m_control)
 	{
-		delete m_data;
-		delete m_count;
+		m_control->m_refCount--;
+		if (m_control->m_refCount == 0)
+		{
+			m_control->m_weakCount--;
+			delete m_ptr;
+		}
+		if (m_control->m_weakCount == 0)
+		{
+			delete m_control;
+		}
 	}
-	m_data = nullptr;
-	m_count = nullptr;
+	m_ptr = nullptr;
+	m_control = nullptr;
 }
 
 bool SharedPtr::isValid() const
 {
-	return m_data != nullptr;
+	return m_ptr != nullptr;
 }
 
 SharedPtr::operator bool() const
@@ -57,33 +66,41 @@ SharedPtr::operator bool() const
 
 int& SharedPtr::operator*() const
 {
-	return *m_data;
+	return *m_ptr;
 }
 
 int* SharedPtr::operator->() const
 {
-	return m_data;
+	return m_ptr;
 }
 
 int* SharedPtr::get() const
 {
-	return m_data;
+	return m_ptr;
 }
 
 void SharedPtr::reset(int* data)
 {
-	if (data != m_data)
+	if (data != m_ptr)
 	{
-		m_data = data;
-		if (m_count)
+		m_ptr = data;
+		if (m_control)
 		{
-			--(*m_count);
+			m_control->m_refCount--;
 		}
-		m_count = new size_t(1);
+		m_control = new ControlBlock();
 	}
 }
 
 size_t SharedPtr::useCount() const
 {
-	return m_count ? *m_count : 0;
+	return m_control ? m_control->m_refCount : 0;
+}
+
+SharedPtr::SharedPtr(const WeakPtr& other) : m_ptr(other.m_ptr), m_control(other.m_control)
+{
+	if (m_control)
+	{
+		m_control->m_refCount++;
+	}
 }

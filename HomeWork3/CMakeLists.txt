@@ -12,7 +12,7 @@ endif()
 project ("HomeWork3")
 
 # Add source to this project's executable.
-add_executable (HomeWork3 "main.cpp" "main.h" "SharedPtr.h" "SharedPrt.cpp")
+add_executable (HomeWork3 "main.cpp" "main.h" "SharedPtr.h" "SharedPrt.cpp" "WeakPtr.h" "WeakPtr.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET HomeWork3 PROPERTY CXX_STANDARD 20)
