@@ -5,3 +5,4 @@
 
 #include <iostream>
 #include "SharedPtr.h"
+#include "WeakPtr.h"
