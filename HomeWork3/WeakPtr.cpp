@@ -19,6 +19,12 @@ WeakPtr::WeakPtr(const SharedPtr& other) : m_ptr(other.m_ptr), m_control(other.m
 	}
 }
 
+WeakPtr::WeakPtr(WeakPtr&& other) noexcept : m_ptr(other.m_ptr), m_control(other.m_control)
+{
+	other.m_ptr = nullptr;
+	other.m_control = nullptr;
+}
+
 WeakPtr& WeakPtr::operator=(const WeakPtr& other)
 {
 	if (this == &other) return *this;
@@ -29,6 +35,17 @@ WeakPtr& WeakPtr::operator=(const WeakPtr& other)
 	{
 		m_control->m_weakCount++;
 	}
+	return *this;
+}
+
+WeakPtr& WeakPtr::operator=(WeakPtr&& other) noexcept
+{
+	if (this == &other) return *this;
+	release();
+	m_ptr = other.m_ptr;
+	m_control = other.m_control;
+	other.m_ptr = nullptr;
+	other.m_control = nullptr;
 	return *this;
 }
 

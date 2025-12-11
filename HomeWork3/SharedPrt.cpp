@@ -17,6 +17,12 @@ SharedPtr::SharedPtr(const SharedPtr& other): m_ptr(other.m_ptr), m_control(othe
 	}
 }
 
+SharedPtr::SharedPtr(SharedPtr&& other) noexcept : m_ptr(other.m_ptr), m_control(other.m_control)
+{
+	other.m_ptr = nullptr;
+	other.m_control = nullptr;
+}
+
 SharedPtr& SharedPtr::operator=(const SharedPtr& other)
 {
 	if (this == &other) return *this;
@@ -27,6 +33,17 @@ SharedPtr& SharedPtr::operator=(const SharedPtr& other)
 	{
 		m_control->m_refCount++;
 	}
+	return *this;
+}
+
+SharedPtr& SharedPtr::operator=(SharedPtr&& other) noexcept
+{
+	if (this == &other) return *this;
+	release();
+	m_ptr = other.m_ptr;
+	m_control = other.m_control;
+	other.m_ptr = nullptr;
+	other.m_control = nullptr;
 	return *this;
 }
 

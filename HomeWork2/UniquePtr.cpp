@@ -6,6 +6,20 @@ UniquePtr::UniquePtr(int* data): m_data(data)
 UniquePtr::UniquePtr(int data): m_data(new int{data})
 {}
 
+UniquePtr::UniquePtr(UniquePtr&& other) noexcept : m_data(other.m_data)
+{
+	other.m_data = nullptr;
+}
+
+UniquePtr& UniquePtr::operator=(UniquePtr&& other) noexcept
+{
+	if (&other == this) return *this;
+	if (m_data) delete m_data;
+	m_data = other.m_data;
+	other.m_data = nullptr;
+	return *this;
+}
+
 UniquePtr::~UniquePtr()
 {
 	delete m_data;

@@ -10,10 +10,10 @@ public:
 	WeakPtr();
 	WeakPtr(const WeakPtr&);
 	WeakPtr(const SharedPtr&);
-	WeakPtr(WeakPtr&&) = delete;
+	WeakPtr(WeakPtr&&) noexcept;
 	WeakPtr& operator=(const WeakPtr&);
 	WeakPtr& operator=(const SharedPtr&);
-	WeakPtr& operator=(WeakPtr&&) = delete;
+	WeakPtr& operator=(WeakPtr&&) noexcept;
 	~WeakPtr();
 
 	bool expired() const;
