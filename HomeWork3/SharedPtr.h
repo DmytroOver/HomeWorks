@@ -17,9 +17,9 @@ class SharedPtr
 public:
 	SharedPtr(int* data = nullptr);
 	SharedPtr(const SharedPtr&);
-	SharedPtr(SharedPtr&&) = delete;
+	SharedPtr(SharedPtr&&) noexcept;
 	SharedPtr& operator=(const SharedPtr&);
-	SharedPtr& operator=(SharedPtr&&) = delete;
+	SharedPtr& operator=(SharedPtr&&) noexcept;
 	~SharedPtr();
 
 	bool isValid() const;

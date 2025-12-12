@@ -5,9 +5,10 @@ class UniquePtr
 	int* m_data = nullptr;
 public:
 	UniquePtr(const UniquePtr&) = delete;
-	UniquePtr(UniquePtr&&) = delete;
 	UniquePtr& operator=(const UniquePtr&) = delete;
-	UniquePtr&& operator=(UniquePtr&&) = delete;
+
+	UniquePtr(UniquePtr&&) noexcept;
+	UniquePtr& operator=(UniquePtr&&) noexcept;
 
 	UniquePtr(int* data = nullptr);
 	UniquePtr(int data);

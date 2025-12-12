@@ -46,8 +46,24 @@ int main()
 		WeakPtr wp9(wp8);
 		std::cout << "p7.useCount() " << p7.useCount() << std::endl;
 		std::cout << "*wp9.lock() " << *(wp9.lock()) << std::endl;
+
+		WeakPtr wp10{ std::move(wp7) };
+		std::cout << "*wp10.lock() " << *wp10.lock() << std::endl;
+		std::cout << "wp7.lock() " << wp7.lock() << std::endl;
+		WeakPtr wp11 = std::move(wp8);
+		std::cout << "*wp11.lock() " << *wp11.lock() << std::endl;
+		std::cout << "wp8.lock() " << wp8.lock() << std::endl;
 	}
 	std::cout << "wp7.expired() " << wp7.expired() << std::endl;
+
+	SharedPtr p8{ std::move(p1) };
+	std::cout << "p1 " << p1 << std::endl;
+	std::cout << "*p8 " << *p8 << std::endl;
+	std::cout << "p8.useCount() " << p8.useCount() << std::endl;
+	SharedPtr p9 = std::move(p3);
+	std::cout << "p3.useCount() " << p3.useCount() << std::endl;
+	std::cout << "*p9 " << *p9 << std::endl;
+	std::cout << "p9.useCount() " << p9.useCount() << std::endl;
 
 	return 0;
 }
