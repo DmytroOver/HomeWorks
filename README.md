@@ -5,3 +5,5 @@ Home works for C++ Pro course
 2. Home Work 2: RAII with Unique Ptr
 3. Home Work 3: RAII with Shared pointer. Bonus: Weak pointer.
 4. Home Work 4: Text editor with STL smart pointers and Command design pattern.
+5. Home Work 5: Move semantic for smart pointers.
+6. Home Work 6: std::filesystem.
