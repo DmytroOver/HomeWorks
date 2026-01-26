@@ -51,6 +51,9 @@ void printMenu(const std::vector<std::string_view>& names)
 
 int main()
 {
+	FileFilter filter;
+	addOtherFilesPredicate(filter);
+	changeImagesPredicate(filter);
 	std::string input;
 	for (;;)
 	{
@@ -71,9 +74,6 @@ int main()
 			std::cout << "Path " << path << " is not a directory." << std::endl;
 			continue;
 		}
-		FileFilter filter;
-		addOtherFilesPredicate(filter);
-		changeImagesPredicate(filter);
 		filter.processDir(path);
 
 		for (;;)
