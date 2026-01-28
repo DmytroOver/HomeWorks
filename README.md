@@ -7,3 +7,4 @@ Home works for C++ Pro course
 4. Home Work 4: Text editor with STL smart pointers and Command design pattern.
 5. Home Work 5: Move semantic for smart pointers.
 6. Home Work 6: std::filesystem.
+7. Home Work 7: std::ranges
