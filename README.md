@@ -8,3 +8,6 @@ Home works for C++ Pro course
 5. Home Work 5: Move semantic for smart pointers.
 6. Home Work 6: std::filesystem.
 7. Home Work 7: std::ranges
+8. Home Work 8. Boost installation
+9. Home Work 9. Library
+10. Home works 11. TCP server 
