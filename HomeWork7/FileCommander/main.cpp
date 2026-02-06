@@ -1,7 +1,9 @@
 ﻿// main.cpp : Defines the entry point for the application.
 //
 
-#include "main.h"
+#include <iostream>
+#include <unordered_set>
+#include "FileFilter.h"
 
 namespace fs = std::filesystem;
 
