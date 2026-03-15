@@ -29,7 +29,7 @@ private:
     QVBoxLayout* m_rootLayout = nullptr;
     QGridLayout* m_grid = nullptr;
 
-    QPushButton* makeButton(const QString& label, const QString& name) const;
+    QPushButton* makeButton(const QString& label, const QString& name, const int shortcut = 0) const;
     double currentValue() const;
     void setDisplayNumber(double v);
     void clearAll();

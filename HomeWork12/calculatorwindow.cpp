@@ -3,6 +3,9 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QKeyEvent>
+#include <QT>
+#include <QFont>
 
 CalculatorWindow::CalculatorWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -17,6 +20,9 @@ CalculatorWindow::CalculatorWindow(QWidget* parent)
     m_display = new QLabel("0", m_central);
     m_display->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_display->setMinimumHeight(70);
+    QFont font = m_display->font();
+    font.setPointSize(20);
+    m_display->setFont(font);
 
     m_rootLayout->addWidget(m_display);
 
@@ -26,37 +32,34 @@ CalculatorWindow::CalculatorWindow(QWidget* parent)
     m_rootLayout->addLayout(m_grid);
 
     int number = 1;
-    for (int row = 2; row >= 0; --row) {
+    for (int row = 3; row > 0; --row) {
         for (int col = 0; col < 3; ++col) {
             const int digit = number++;
             const QString obj  = QString::number(digit);
 
-            QPushButton* b = makeButton(obj, obj);
-            b->setObjectName(obj);
+            QPushButton* b = makeButton(obj, obj, Qt::Key_0 + digit);
 
-            b->setMinimumSize(60, 55);
-            b->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-            connect(b, &QPushButton::clicked, this, &CalculatorWindow::onButtonClicked);
-            m_grid->addWidget(b, row + 1, col);
+            m_grid->addWidget(b, row, col);
         }
     }
 
-    QPushButton* b0 = makeButton("0", "0");
+    QPushButton* b0 = makeButton("0", "0", Qt::Key_0);
     m_grid->addWidget(b0, 4, 0, 1, 2);
 
-    QPushButton* dot = makeButton(".", ".");
+    QPushButton* dot = makeButton(".", ".", Qt::Key_Period);
     m_grid->addWidget(dot, 4, 2);
 
     const QStringList ops = { "/", "*", "-", "+", "=" };
+    const QList opsKeys = {Qt::Key_Slash, Qt::Key_Asterisk, Qt::Key_Minus, Qt::Key_Plus, Qt::Key_Enter};
     for (int i = 0; i < ops.size(); ++i) {
         const QString op = ops[i];
-        QPushButton* b = makeButton(op, op);
+        const int key = opsKeys[i];
+        QPushButton* b = makeButton(op, op, key);
         m_grid->addWidget(b, i, 3);
     }
 
-    QPushButton* clear = makeButton("C", "cmd_clear");
-    QPushButton* back  = makeButton("<-", "cmd_back");
+    QPushButton* clear = makeButton("C", "cmd_clear", Qt::Key_C);
+    QPushButton* back  = makeButton("<-", "cmd_back", Qt::Key_Backspace);
     QPushButton* sign  = makeButton("±", "cmd_sign");
 
     m_grid->addWidget(clear, 0, 0);
@@ -69,10 +72,19 @@ CalculatorWindow::~CalculatorWindow()
     delete m_central;
 }
 
-QPushButton* CalculatorWindow::makeButton(const QString& label, const QString& name) const
+QPushButton* CalculatorWindow::makeButton(const QString& label, const QString& name, const int shortcut) const
 {
     QPushButton* button = new QPushButton(label, m_central);
     button->setObjectName(name);
+    button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    if (shortcut)
+    {
+        button->setShortcut(shortcut);
+    }
+    QFont font = button->font();
+    font.setPointSize(20);
+    button->setFont(font);
+    connect(button, &QPushButton::clicked, this, &CalculatorWindow::onButtonClicked);
     return button;
 }
 
@@ -88,12 +100,12 @@ void CalculatorWindow::onButtonClicked()
         return;
     }
 
-    if (key == "C") {
+    if (key == "cmd_clear") {
         clearAll();
         return;
     }
 
-    if (key == "back") {
+    if (key == "cmd_back") {
         inputBackspace();
         return;
     }
@@ -113,7 +125,7 @@ void CalculatorWindow::onButtonClicked()
         return;
     }
 
-    if (key == "sign") {
+    if (key == "cmd_sign") {
         if (m_error) return;
         if (m_waitingForNewNumber) return;
 
