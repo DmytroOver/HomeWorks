@@ -12,3 +12,4 @@ Home works for C++ Pro course
 9. Home Work 9. Library.
 10. Home Work 10. QT "Hello World".
 11. Home Work 11. TCP server.
+12. Home Work 12. Calculator on QT Widgets.
